@@ -31,15 +31,17 @@ def pass_generator(nome, idade, data_de_nascimento):
     senha_teste = "" #As senhas geradas serão salvas aqui
 
 
+
   #em dev
-    for caractere in nome_m:
-        senha_teste += caractere
-        for caracteres in nome_m:
+    for caracteres in nome_m:
+        if len(senha_teste) <= 8:
             if caracteres not in senha_teste:
                 senha_teste += caracteres
     else:
-        print(senha_teste)
-  #em dev
+        print(senha_teste)#em dev
+
+
+
 
 pass_generator("Lucas Paulino da silva", 17, "29/08/2007") #testa passando os parametreos
 

@@ -75,7 +75,7 @@ There are three main scripts in the project:
    save_to_txt(passwords, file_name="Pass_Generated.txt")
    ```
 
-### Example output in the `pass_generated.txt` file
+### Example output in the `Pass_Generated.txt` file
 
 ```
 MariaSilva94

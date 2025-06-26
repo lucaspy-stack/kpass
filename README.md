@@ -40,10 +40,10 @@ The **passwords_generator** is a simple module that, given a full name, age, and
 There are three main scripts in the project:
 
 1. **Password generator** (`Password_Generator.py`)  
-   Runs an interactive prompt:
+   Runs an interactive prompt with:
 
    ```bash
-   python Password_Generator.py
+   python Read_Passwords.py
    ```
 
    You will be asked to enter:

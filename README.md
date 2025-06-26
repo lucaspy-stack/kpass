@@ -34,17 +34,6 @@ The **passwords_generator** is a simple module that, given a full name, age, and
    # macOS/Linux
    source venv/bin/activate
    ```
-4. **Install dependencies**  
-   There are no external libraries beyond the standard library, but to isolate dependencies if you want:
-
-   ```bash
-   pip install -r requirements.txt  # (no packages, the file might not even exist)
-   ```
-5. **Install as a local package** *(optional)*
-
-   ```bash
-   pip install .
-   ```
 
 ## Usage
 

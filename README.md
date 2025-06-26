@@ -13,7 +13,7 @@ A Python library that generates passwords based on 3 parameters: name, age, and 
 - [Contact](#contact)
 
 ## Overview
-The **passwords_generator** is a simple module that, given a full name, age, and birth date, generates password combinations between 6 and 18 characters, using case variations, reversal, and character substitutions (A→4, S→$, E→&).
+The **passwords_generator** is a simple module that, given a full name, age, and birth date, generates password combinations between 6 and 18 characters, using case variations, reversal, and character substitutions (A→4, S→$, E→&, etc).
 
 ## Installation
 

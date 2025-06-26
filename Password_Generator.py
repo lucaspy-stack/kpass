@@ -73,7 +73,7 @@ def pass_generator(name, age, birth_date):
     return list(possible_passwords)
 
 # Function to save passwords to file
-def save_to_txt(passwords, file_name="pass_generated.txt"):
+def save_to_txt(passwords, file_name="Pass_Generated.txt"):
     with open(file_name, "w", encoding="utf-8") as file:
         for password in passwords:
             file.write(password + "\n")

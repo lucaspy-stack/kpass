@@ -1,3 +1,5 @@
+# Password generator itself
+
 import itertools
 
 # Ciphers dictionary to replace letters

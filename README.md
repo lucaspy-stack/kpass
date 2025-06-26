@@ -65,7 +65,7 @@ There are three main scripts in the project:
    In your own Python code, import the functions:
 
    ```python
-   from Pass_Generated import pass_generator, save_to_txt
+   from Password_Generator import pass_generator, save_to_txt
 
    full_name = "João da Silva"
    age = "25"

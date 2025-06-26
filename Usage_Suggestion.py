@@ -1,3 +1,5 @@
+# Just a suggestion for use
+
 from passgen import pass_generator, save_to_txt
 
 name = input("Enter your full name: ")

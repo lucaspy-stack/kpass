@@ -1,49 +1,77 @@
 import itertools
 
-# Dicionário de cifras para substituir letras
-cifras = {"A": "4", "S": "$", "E": "&", "a": "4", "s": "$", "e": "&"}
+# Ciphers dictionary to replace letters
+ciphers = {
+    "A": "4", "a": "4", "Á": "4", "á": "4", "@": "4",
+    "B": "8", "b": "8",
+    "C": "(", "c": "(",
+    "D": "[)", "d": "[)",
+    "E": "3", "e": "3", "É": "3", "é": "3", "&": "3",
+    "F": "#", "f": "#",
+    "G": "6", "g": "6",
+    "H": "#", "h": "#",
+    "I": "1", "i": "1", "Í": "1", "í": "1", "!": "1",
+    "J": "_|", "j": "_|",
+    "K": "|<", "k": "|<",
+    "L": "1", "l": "1",
+    "M": "/\\/\\", "m": "/\\/\\",
+    "N": "|\\|", "n": "|\\|",
+    "O": "0", "o": "0", "Ó": "0", "ó": "0",
+    "P": "|D", "p": "|D",
+    "Q": "0_", "q": "0_",
+    "R": "12", "r": "12",
+    "S": "$", "s": "$", "Š": "$", "š": "$",
+    "T": "7", "t": "7",
+    "U": "(_)", "u": "(_)",
+    "V": "\\/", "v": "\\/",
+    "W": "\\/\\/", "w": "\\/\\/",
+    "X": "%", "x": "%",
+    "Y": "`/", "y": "`/",
+    "Z": "2", "z": "2"
+}
 
-# Função para aplicar cifra no texto
-def aplicar_cifras(texto):
-    return ''.join(cifras.get(char, char) for char in texto)
 
-# Função para gerar senhas
-def pass_generator(nome, idade, data_nascimento):
-    dia, mes, ano = data_nascimento.split("/")
+# Function to apply ciphers to text
+def aplly_ciphers(text):
+    return ''.join(ciphers.get(char, char) for char in text)
 
-    nome_m = nome.lower().replace(" ", "")
-    nome_M = nome.upper().replace(" ", "")
+# Function to generate passwords
+def pass_generator(name, age, birth_date):
+    day, month, yaer = birth_date.split("/")
 
-    partes_nome = nome.split()
-    primeiro = partes_nome[0]
-    meio = "".join(partes_nome[1:-1]) if len(partes_nome) > 2 else ""
-    ultimo = partes_nome[-1] if len(partes_nome) > 1 else ""
+    name_tiny = name.lower().replace(" ", "")
+    name_capital = name.upper().replace(" ", "")
 
-    idade_invertida = idade[::-1]
+    parts_name = name.split()
+    first = parts_name[0]
+    middle = "".join(parts_name[1:-1]) if len(parts_name) > 2 else ""
+    last = parts_name[-1] if len(parts_name) > 1 else ""
 
-    combinacoes_base = [
-        nome_m, nome_M, primeiro, meio, ultimo,
-        dia, mes, ano,
-        idade, idade_invertida,
-        aplicar_cifras(nome_m), aplicar_cifras(primeiro), aplicar_cifras(ultimo)
+    age_reversed  = age[::-1]
+
+    base_combinations = [
+        name_tiny, name_capital, first, middle, last,
+        day, month, yaer,
+        age, age_reversed ,
+        aplly_ciphers(name_tiny), aplly_ciphers(first), aplly_ciphers(last)
     ]
 
-    # Remove strings vazias e duplicadas
-    combinacoes_base = list(set(filter(lambda x: x.strip() != "", combinacoes_base)))
+    # Remove empty and duplicate strings
+    base_combinations = list(set(filter(lambda x: x.strip() != "", base_combinations)))
 
-    senhas_possiveis = set()
+    possible_passwords = set()
 
-    # Gera combinações de 2 até 4 elementos da base
+    # Generates combinations of 2 to 4 base elements
     for i in range(2, 5):
-        for combo in itertools.permutations(combinacoes_base, i):
-            senha = "".join(combo)
-            if 6 <= len(senha) <= 18:
-                senhas_possiveis.add(senha)
+        for combo in itertools.permutations(base_combinations, i):
+            password = "".join(combo)
+            if 6 <= len(password) <= 18:
+                possible_passwords.add(password)
 
-    return list(senhas_possiveis)
+    return list(possible_passwords)
 
-# Função para salvar as senhas em arquivo
-def save_to_txt(senhas, nome_arquivo="pass_generated.txt"):
-    with open(nome_arquivo, "w", encoding="utf-8") as arquivo:
-        for senha in senhas:
-            arquivo.write(senha + "\n")
+# Function to save passwords to file
+def save_to_txt(passwords, file_name="pass_generated.txt"):
+    with open(file_name, "w", encoding="utf-8") as file:
+        for password in passwords:
+            file.write(password + "\n")

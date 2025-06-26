@@ -39,11 +39,11 @@ The **passwords_generator** is a simple module that, given a full name, age, and
 
 There are three main scripts in the project:
 
-1. **Password generator** (`ksenhas.py`)  
+1. **Password generator** (`Password_Generator.py`)  
    Runs an interactive prompt:
 
    ```bash
-   python ksenhas.py
+   python Password_Generator.py
    ```
 
    You will be asked to enter:
@@ -52,27 +52,27 @@ There are three main scripts in the project:
    * **Age** (e.g., “30”)
    * **Birth date** (e.g., “15/08/1994”)
 
-   At the end, a `pass_generated.txt` file will be created with all the generated passwords.
+   At the end, a `Pass_Generated.txt` file will be created with all the generated passwords.
 
-2. **Password reader** (`lersenhas.py`)  
+2. **Password reader** (`Read_Passwords.py`)  
    To display generated passwords in the terminal:
 
    ```bash
-   python lersenhas.py
+   python Read_Passwords.py
    ```
 
 3. **Using as a library**  
    In your own Python code, import the functions:
 
    ```python
-   from passgen import pass_generator, save_to_txt
+   from Pass_Generated import pass_generator, save_to_txt
 
-   names = "João da Silva"
+   full_name = "João da Silva"
    age = "25"
    birth_date = "10/05/1999"
 
-   passwords = pass_generator(names, age, birth_date)
-   save_to_txt(passwords, file_name="my_passwords.txt")
+   passwords = pass_generator(full_name, age, birth_date)
+   save_to_txt(passwords, file_name="Pass_Generated.txt")
    ```
 
 ### Example output in the `pass_generated.txt` file
@@ -93,5 +93,3 @@ This project has no defined license. Feel free to use and adapt it as you wish.
 
 * **Email:** [lucas.workps@gmail.com](mailto:lucas.workps@gmail.com)  
 * **GitHub:** [https://github.com/lucaspy-stack](https://github.com/lucaspy-stack)  
-* **LinkedIn:** [https://www.linkedin.com/in/lucaspy-stack/](https://www.linkedin.com/in/lucaspy-stack/)
-

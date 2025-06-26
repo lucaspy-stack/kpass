@@ -1,6 +1,6 @@
 # Just a suggestion for use
 
-from passgen import pass_generator, save_to_txt
+from Password_Generator import pass_generator, save_to_txt
 
 name = input("Enter your full name: ")
 age = input("Enter your age: ")

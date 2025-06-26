@@ -102,7 +102,7 @@ This project has no defined license. Feel free to use and adapt it as you wish.
 
 ## Contact
 
-* **Email:** [lucaspy-stack@gmail.com](mailto:lucaspy-stack@gmail.com)  
+* **Email:** [lucas.workps@gmail.com](mailto:lucas.workps@gmail.com)  
 * **GitHub:** [https://github.com/lucaspy-stack](https://github.com/lucaspy-stack)  
 * **LinkedIn:** [https://www.linkedin.com/in/lucaspy-stack/](https://www.linkedin.com/in/lucaspy-stack/)
 

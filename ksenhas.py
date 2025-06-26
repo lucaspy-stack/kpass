@@ -1,10 +1,10 @@
 from passgen import pass_generator, save_to_txt
 
-nome = input("Digite seu nome completo: ")
-idade = input("Digite sua idade: ")
-data = input("Digite sua data de nascimento (dd/mm/aaaa): ")
+name = input("Enter your full name: ")
+age = input("Enter your age: ")
+data = input("Enter your date of birth (dd/mm/yyyy): ")
 
-senhas = pass_generator(nome, idade, data)
-save_to_txt(senhas)
+passwords = pass_generator(name, age, data)
+save_to_txt(passwords)
 
-print(f"{len(senhas)} senhas geradas e salvas com sucesso!")
+print(f"{len(passwords)} Passwords generated and saved successfully!")

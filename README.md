@@ -1,4 +1,3 @@
-````markdown
 # kpass
 
 **kpass** is a Python library that:

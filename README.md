@@ -1,95 +1,64 @@
+# kpass 
 
-# passwords_generator
+**kpass** is a Python library that generates hundreds (or thousands) of password combinations based on a person's full name, age, and date of birth.
 
-A Python library that generates passwords based on 3 parameters: name, age, and birth date (e.g., dd/mm/yyyy).
+It also includes `leet`-style substitutions (e.g., A → 4, S → $, E → 3), and automatically saves the generated passwords to a `.txt` file with progress bars using the `rich` library.
 
-<img src="https://skillicons.dev/icons?i=python" />
+---
 
-## Table of contents
-- [Overview](#overview)
-- [Installation](#installation)
-- [Usage](#usage)
-- [License](#license)
-- [Contact](#contact)
+## 📦 Installation
 
-## Overview
-The **passwords_generator** is a simple module that, given a full name, age, and birth date, generates password combinations between 6 and 18 characters, using case variations, reversal, and character substitutions (A→4, S→$, E→&, etc).
+```bash
+pip install kpass
 
-## Installation
 
-1. **Prerequisites**  
-   - Python 3.6 or higher installed.
-2. **Clone this repository**  
-   ```bash
-   git clone https://github.com/lucaspy-stack/passwords_generator.git
-   cd passwords_generator
-   ```
+---
 
-3. *(Optional)* Create and activate a virtual environment:
+🚀 Example usage
 
-   ```bash
-   python -m venv venv
-   # Windows
-   venv\Scripts\activate
-   # macOS/Linux
-   source venv/bin/activate
-   ```
+from kpass import generator
 
-## Usage
+# Generate passwords based on personal data
+generator(
+    name="Jhonny Silverhand",
+    age="34",
+    birth_date="16/11/1988"
+)
 
-There are three main scripts in the project:
+This will create a folder called passwords_generator containing a file named pass_generated.txt with valid password combinations between 6 and 18 characters.
 
-1. **Password generator** (`Password_Generator.py`)  
-   Runs an interactive prompt with:
 
-   ```bash
-   python Read_Passwords.py
-   ```
+---
 
-   You will be asked to enter:
+🔧 Available functions
 
-   * **Full name** (e.g., “Maria Silva”)
-   * **Age** (e.g., “30”)
-   * **Birth date** (e.g., “15/08/1994”)
+generator(name: str, age: str, birth_date: str) -> bool
 
-   At the end, a `Pass_Generated.txt` file will be created with all the generated passwords.
+Generates and saves passwords automatically.
 
-2. **Password reader** (`Read_Passwords.py`)  
-   To display generated passwords in the terminal:
+aplly_ciphers(text: str) -> str
 
-   ```bash
-   python Read_Passwords.py
-   ```
+Applies leet-style substitutions to the given text (e.g., A → 4, S → $, etc.).
 
-3. **Using as a library**  
-   In your own Python code, import the functions:
+save_to_txt(passwords: list[str], file_name: str = "pass_generated.txt")
 
-   ```python
-   from Password_Generator import pass_generator, save_to_txt
+Saves a list of passwords to a .txt file with a progress bar.
 
-   full_name = "João da Silva"
-   age = "25"
-   birth_date = "10/05/1999"
 
-   passwords = pass_generator(full_name, age, birth_date)
-   save_to_txt(passwords, file_name="Pass_Generated.txt")
-   ```
+---
 
-### Example output in the `Pass_Generated.txt` file
+✅ Requirements
 
-```
-MariaSilva94
-mariasilva94
-M4r14$1lv4
-... (more combinations)
-```
+Python 3.6 or higher
 
-## License
+rich
 
-This project has no defined license. Feel free to use and adapt it as you wish.  
-*Tip:* if you want to release it publicly, consider using a license like MIT or Apache 2.0.
 
-## Contact
+---
 
-* **Email:** [lucas.workps@gmail.com](mailto:lucas.workps@gmail.com)  
-* **GitHub:** [https://github.com/lucaspy-stack](https://github.com/lucaspy-stack)  
+📄 License
+
+This project is licensed under the MIT License.
+
+
+

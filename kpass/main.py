@@ -51,7 +51,7 @@ def aplly_ciphers(text: str) -> str:
     return ''.join(ciphers.get(char, char) for char in text)
 
 # -----------------------------------------------------------------------------
-# Function: save_to_txt
+# Function: save_to_file
 # Description:
 #   Writes a list of passwords to a text file, showing progress in the console
 # Parameters:
@@ -61,17 +61,64 @@ def aplly_ciphers(text: str) -> str:
 #   None
 # -----------------------------------------------------------------------------
 
-def save_to_txt(passwords: list[str], file_name: str = "pass_generated.txt") -> None:
-    with open(file_name, "w", encoding="utf-8-sig") as file:
-        with Progress(
-            TextColumn("[progress.description]{task.description}"),
-            BarColumn(),
-            TimeElapsedColumn(),
-        ) as progress:
-            tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
-            for pwd in passwords:
-                file.write(pwd + "\n")
-                progress.update(tarefa, advance=1)
+def save_to_file(
+        passwords: list[str],
+        scores: list[int],
+        veredicts: list[str],
+        file_name: str | None = "pass_generated",
+        extension: str | None = "json"        
+) -> None:
+    with open(f"{file_name}.{extension}", "w", encoding="utf-8-sig") as file:
+        lista = []
+        minu = extension.lower()
+        maxin = extension.upper()
+        
+        match (extension.lower()):
+            case "json" | ".json":
+                with Progress(
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TimeElapsedColumn(),
+                ) as progress:
+                    tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
+                    for pwd, score, veredict_ in zip(passwords, scores, veredicts):
+                        file.write(base_files_architeture(pwd, score, veredict_, extension))
+                        progress.update(tarefa, advance=1)
+            
+            case "csv" | ".csv":
+                with Progress(
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TimeElapsedColumn(),
+                ) as progress:
+                    tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
+                    for pwd, score, veredict_ in zip(passwords, scores, veredicts):
+                        file.write(base_files_architeture(pwd, score, veredict_, extension))
+                        progress.update(tarefa, advance=1)
+
+            case "yaml" | ".yaml" | "yml" | ".yml":
+                with Progress(
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TimeElapsedColumn(),
+                ) as progress:
+                    tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
+                    for pwd, score, veredict_ in zip(passwords, scores, veredicts):
+                        file.write(base_files_architeture(pwd, score, veredict_, extension.upper()))
+                        progress.update(tarefa, advance=1)
+
+            case _:
+                return print("#file type is not supported")    
+
+        # with Progress(
+        #     TextColumn("[progress.description]{task.description}"),
+        #     BarColumn(),
+        #     TimeElapsedColumn(),
+        # ) as progress:
+        #     tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
+        #     for pwd in passwords:
+        #         file.write(pwd + "\n")
+        #         progress.update(tarefa, advance=1)
 
 # -----------------------------------------------------------------------------
 # Function: generator
@@ -86,7 +133,32 @@ def save_to_txt(passwords: list[str], file_name: str = "pass_generated.txt") -> 
 #   None (calls save_to_txt internally)
 # -----------------------------------------------------------------------------
 
-def generator(name: str, age: str, birth_date: str) -> None:
+def base_files_architeture(password, score, veredict_, file_type):
+    if file_type.lower() in ("json", ".json"):
+        return (
+            '{\n'
+            f'  "password": "{password}",\n'
+            f'  "score": "{score}",\n'
+            f'  "veredict": "{veredict_}"\n'
+            '}'
+        )
+    
+    if file_type.lower() in ("csv", ".csv"):
+        return (
+        f'"password","{password}",\n'
+        f'"score","{score}",\n'
+        f'"veredict,"{veredict_}"\n'
+        )
+
+    
+    if file_type.lower() in ("yaml", ".yaml", "yml", ".yml") or file_type.upper() in ("YAML", ".YAML", "YML", ".YML"):
+        return (
+        f'"password": "{password}"\n'
+        f'"score": "{score}"\n'
+        f'"veredict: "{veredict_}"\n'
+        )
+
+def generator(name: str, age: str, birth_date: str, fyle_type: str | None = "json", fyle_name: str | None = "pass_generated") -> None:
     # Split birth_date into components
     day, month, year = birth_date.split("/")
 
@@ -114,6 +186,8 @@ def generator(name: str, age: str, birth_date: str) -> None:
     base_combinations = list({item for item in base_combinations if item.strip()})
 
     possible_passwords = set()
+    possible_scores = set()
+    possible_veredicts = set()
 
     # Calculate total permutations for progress bar
     total = sum(len(list(itertools.permutations(base_combinations, i))) for i in range(2, 5))
@@ -131,8 +205,29 @@ def generator(name: str, age: str, birth_date: str) -> None:
                     possible_passwords.add(pwd)
                 progress.update(task, advance=1)
 
+        scores = [verify(password, False) for password in possible_passwords]
+        veredicts = [verify(password) for password in possible_passwords]
+        
+        task2 = progress.add_task("scores", total=len(veredicts) - 1)
+        for length in range(2, 5):
+            for combo in itertools.permutations(base_combinations, length):
+                veredicts_list = "".join(combo)
+                if 6 <= len(veredicts_list) <= 18:
+                    possible_veredicts.add(pwd)
+                progress.update(task2, advance=1)
+        
+        task3 = progress.add_task("scores", total=len(scores) - 1)
+        for length in range(2, 5):
+            for combo in itertools.permutations(base_combinations, length):
+                scores_list = "".join(combo)
+                if 6 <= len(scores_list) <= 18:
+                    possible_scores.add(pwd)
+                progress.update(task2, advance=1)
+
+        
+
     # Save results to file
-    save_to_txt(list(possible_passwords))
+    save_to_file(list(possible_passwords), list(possible_scores), list(possible_veredicts), fyle_name, fyle_type)
 
 # -----------------------------------------------------------------------------
 # Function: check_sequences
@@ -219,3 +314,5 @@ def verify(
 
     # Return verdict or raw score
     return veredict(strength) if want_verdict else strength
+
+generator("Lucas", "17", "29/08/2007", ".yml")

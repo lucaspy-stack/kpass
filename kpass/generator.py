@@ -82,9 +82,9 @@ def generator(name, age, birth_date):
                     possible_passwords.add(password)
                 progress.update(task, advance=1)
                 
-    save_to_txt(list(possible_passwords))
+    return  save_to_txt(list(possible_passwords))
     
-    return true
+    
 
 # Function to save passwords to file
 

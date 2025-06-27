@@ -9,7 +9,7 @@ It also includes `leet`-style substitutions (e.g., A → 4, S → $, E → 3), a
 ## 📦 Installation
 
 ```bash
-pip install kpass
+pip install kpass-gen
 ```
 ---
 

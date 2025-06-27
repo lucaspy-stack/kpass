@@ -41,9 +41,9 @@ generator(
 ```python
 from kpass import aplly_ciphers
 
-original = "SecurePass"
+original = "Panam Palmer"
 leet = aplly_ciphers(original)
-print(leet)  # → "$3cur3P4$$" (example)
+print(leet)  # → "|D4|\|4/\/\ |D41/\/\312" (example)
 ```
 
 ---
@@ -55,7 +55,7 @@ If you already have a list of passwords and only want to save them:
 ```python
 from kpass import save_to_txt
 
-passwords = ["abc123!", "Johnny34@", "4bcc!23"]
+passwords = ["2077!", "Johnny34@", "V24!23"]
 save_to_txt(passwords, file_name="my_passwords.txt")
 ```
 
@@ -67,11 +67,11 @@ save_to_txt(passwords, file_name="my_passwords.txt")
 from kpass import verify
 
 # Returns a numeric score (0–6)
-score = verify(password="Luc@s683", want_verdict=False)
+score = verify(password="J4ckw$$l190s", want_verdict=False)
 print(score)        # → 6
 
 # Returns a hashtag verdict
-label = verify(password="Luc@s683", want_verdict=True)
+label = verify(password="J4ckw$$l190s", want_verdict=True)
 print(label)        # → "#very_strong"
 ```
 

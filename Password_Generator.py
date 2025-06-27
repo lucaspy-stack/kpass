@@ -1,6 +1,8 @@
 # Password generator itself
 
 import itertools
+from rich.progress import Progress, BarColumn, TextColumn, TimeElapsedColumn
+import os
 
 # Ciphers dictionary to replace letters
 ciphers = {
@@ -38,6 +40,7 @@ def aplly_ciphers(text):
     return ''.join(ciphers.get(char, char) for char in text)
 
 # Function to generate passwords
+
 def pass_generator(name, age, birth_date):
     day, month, yaer = birth_date.split("/")
 
@@ -54,26 +57,48 @@ def pass_generator(name, age, birth_date):
     base_combinations = [
         name_tiny, name_capital, first, middle, last,
         day, month, yaer,
-        age, age_reversed ,
+        age, age_reversed,
         aplly_ciphers(name_tiny), aplly_ciphers(first), aplly_ciphers(last)
     ]
 
-    # Remove empty and duplicate strings
     base_combinations = list(set(filter(lambda x: x.strip() != "", base_combinations)))
 
     possible_passwords = set()
 
-    # Generates combinations of 2 to 4 base elements
-    for i in range(2, 5):
-        for combo in itertools.permutations(base_combinations, i):
-            password = "".join(combo)
-            if 6 <= len(password) <= 18:
-                possible_passwords.add(password)
+    # Calcula o total de combinações pra progress bar
+    total = sum(len(list(itertools.permutations(base_combinations, i))) for i in range(2, 5))
+
+    with Progress(
+        TextColumn("[cyan]Generating passwords..."),
+        BarColumn(),
+        TimeElapsedColumn(),
+    ) as progress:
+        task = progress.add_task("passwords", total=total)
+
+        for i in range(2, 5):
+            for combo in itertools.permutations(base_combinations, i):
+                password = "".join(combo)
+                if 6 <= len(password) <= 18:
+                    possible_passwords.add(password)
+                progress.update(task, advance=1)
 
     return list(possible_passwords)
 
 # Function to save passwords to file
+
 def save_to_txt(passwords, file_name="Pass_Generated.txt"):
-    with open(file_name, "w", encoding="utf-8") as file:
-        for password in passwords:
-            file.write(password + "\n")
+    path = "passwords_generator"
+    os.makedirs(path, exist_ok=True)
+
+    with open(os.path.join(path, file_name), "w", encoding="utf-8-sig") as file:
+        with Progress(
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(),
+            TimeElapsedColumn(),
+        ) as progress:
+
+            tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
+
+            for password in passwords:
+                file.write(password + "\n")
+                progress.update(tarefa, advance=1)

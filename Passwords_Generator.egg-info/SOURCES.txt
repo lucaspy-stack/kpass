@@ -1,0 +1,9 @@
+LICENSE.txt
+README.md
+pyproject.toml
+setup.py
+Passwords_Generator.egg-info/PKG-INFO
+Passwords_Generator.egg-info/SOURCES.txt
+Passwords_Generator.egg-info/dependency_links.txt
+Passwords_Generator.egg-info/requires.txt
+Passwords_Generator.egg-info/top_level.txt

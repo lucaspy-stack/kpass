@@ -88,7 +88,7 @@ def generator(name, age, birth_date):
 
 # Function to save passwords to file
 
-def save_to_txt(passwords, file_name="Pass_Generated.txt"):
+def save_to_txt(passwords, file_name="pass_generated.txt"):
     path = "passwords_generator"
     os.makedirs(path, exist_ok=True)
 

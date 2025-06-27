@@ -315,4 +315,4 @@ def verify(
     # Return verdict or raw score
     return veredict(strength) if want_verdict else strength
 
-generator("Lucas", "17", "29/08/2007", ".yml")
+# generator("Lucas", "17", "29/08/2007", ".yml")

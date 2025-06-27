@@ -1,5 +1,9 @@
 # kpass
 
+<p align="center">
+  <img src="assets/kpass_icon.png" alt="kpass logo" width="400"/>
+</p>
+
 **kpass** is a Python library that:
 
 1. Generates hundreds (or thousands) of password combinations based on a person’s full name, age, and date of birth.  

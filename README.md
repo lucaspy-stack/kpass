@@ -1,7 +1,7 @@
 # kpass
 
 <p align="center">
-  <img src="assets/kpass_icon.png" alt="kpass logo" width="400"/>
+  <img src="assets/kpass_icon.png" alt="kpass logo" width="100%"/>
 </p>
 
 **kpass** is a Python library that:

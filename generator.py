@@ -41,7 +41,7 @@ def aplly_ciphers(text):
 
 # Function to generate passwords
 
-def pass_generator(name, age, birth_date):
+def generator(name, age, birth_date):
     day, month, yaer = birth_date.split("/")
 
     name_tiny = name.lower().replace(" ", "")
@@ -81,8 +81,10 @@ def pass_generator(name, age, birth_date):
                 if 6 <= len(password) <= 18:
                     possible_passwords.add(password)
                 progress.update(task, advance=1)
-
-    return list(possible_passwords)
+                
+    save_to_txt(list(possible_passwords))
+    
+    return true
 
 # Function to save passwords to file
 

@@ -10,20 +10,20 @@ It also includes `leet`-style substitutions (e.g., A → 4, S → $, E → 3), a
 
 ```bash
 pip install kpass
-
-
+```
 ---
 
 🚀 Example usage
 
-from kpass import generator
+
+```from kpass import generator
 
 # Generate passwords based on personal data
 generator(
     name="Jhonny Silverhand",
     age="34",
     birth_date="16/11/1988"
-)
+)```
 
 This will create a folder called passwords_generator containing a file named pass_generated.txt with valid password combinations between 6 and 18 characters.
 

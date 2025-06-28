@@ -67,11 +67,12 @@ generator(
 
 2. Leet-Style Substitution
 
+```python
 from kpass import aplly_ciphers
 
 leet = aplly_ciphers("Panam Palmer")
 print(leet)  # → "|D4|\|4/\/\ |D41/\/\312"
-
+```
 
 ---
 

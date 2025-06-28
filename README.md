@@ -55,7 +55,8 @@ generator(
     name="Johnny Silverhand",
     age="34",
     birth_date="16/11/1988"
-)```
+)
+```
 
 > Creates pass_generated.txt with valid passwords (6–18 chars) and a terminal progress bar.
 

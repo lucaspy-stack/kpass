@@ -1,142 +1,140 @@
-# kpass
+# 🔐 kpass — Smart Password Generator & Evaluator
 
 <p align="center">
   <img src="assets/kpass_icon.png" alt="kpass logo" width="100%"/>
 </p>
 
-**kpass** is a Python library that:
-
-1. Generates hundreds (or thousands) of password combinations based on a person’s full name, age, and date of birth.  
-2. Applies “leet”-style substitutions (e.g., A → 4, S → $, E → 3).  
-3. Calculates **password strength** according to length, digit presence, special characters, mixed case, and absence of simple numeric sequences.  
-4. Automatically saves generated passwords to a `.txt` file with progress bars powered by the `rich` library.
+**kpass** é uma toolkit em Python para **gerar**, **cipherizar** e **avaliar** senhas — voltado a cenários de **educação**, **testes** e **automação**.
 
 ---
 
-## 📦 Installation
+## ✨ Funcionalidades
+
+* **Geração** de centenas ou milhares de combinações de senha a partir de:
+
+  * Nome completo
+  * Idade
+  * Data de nascimento
+* **Leet-speak**: substituições como `A → 4`, `E → 3`, `S → $`
+* **Avaliação de força** da senha por meio de:
+
+  * Comprimento
+  * Dígitos
+  * Caracteres especiais
+  * Mix de maiúsculas/minúsculas
+  * Detecção de sequências numéricas
+* **Exportação** automática para `.json`, `.csv` ou `.yaml` com barra de progresso via `rich`
+
+---
+
+## ⚠️ Aviso de Segurança
+
+Este projeto **não** gera senhas seguras para sistemas reais.
+Ele usa dados **previsíveis** (nomes, datas), por isso não deve ser usado em ambientes de produção.
+
+---
+
+## 🎯 Casos de Uso
+
+* 🧠 **Conscientização em Cibersegurança**
+  Entenda por que informações pessoais formam senhas fracas.
+
+* 🧰 **Pentesting & Wordlists**
+  Crie listas de senhas para testes éticos.
+
+* 🧪 **Automação & Testes**
+  Gere senhas de teste para scripts, bots e ambientes sandbox.
+
+---
+
+## 📦 Instalação
 
 ```bash
 pip install kpass-gen
-````
+```
+
+> Requer Python 3.6+
 
 ---
 
-## 🚀 Example Usage
+## 🚀 Exemplos de Uso
 
-### 1. Generating Passwords
+### 1. Gerar Senhas
 
 ```python
 from kpass import generator
 
-# Generate hundreds of password combinations based on personal data
+# gera senhas, avalia força e salva em pass_generated.json
 generator(
-    name="Johnny Silverhand",
-    age="34",
-    birth_date="16/11/1988"
+    name="Lucas Paulino",
+    age="17",
+    birth_date="29/08/2007",
+    file_type="json",      # opcional: json, csv, yaml ou yml
+    file_name="minhas_senhas"  # opcional: nome do arquivo sem extensão
 )
 ```
 
-> This will create a file named `pass_generated.txt` (in the default or specified folder) containing all valid passwords between 6 and 18 characters, with a progress bar shown during generation.
-
----
-
-### 2. Applying Leet-Style Substitutions
+### 2. Aplicar Leet Cipher
 
 ```python
-from kpass import aplly_ciphers
+from kpass import apply_ciphers
 
-original = "Panam Palmer"
-leet = aplly_ciphers(original)
-print(leet)  # → "|D4|\|4/\/\ |D41/\/\312" (example)
+leet = apply_ciphers("Panam Palmer")
+print(leet)  # → "|D4|\|4/\/\ |D41/\/\312"
 ```
 
----
-
-### 3. Saving Passwords Manually
-
-If you already have a list of passwords and only want to save them:
+### 3. Salvar Listas de Senha Manualmente
 
 ```python
-from kpass import save_to_txt
+from kpass import save_to_file
 
 passwords = ["2077!", "Johnny34@", "V24!23"]
-save_to_txt(passwords, file_name="my_passwords.txt")
+scores    = [2, 4, 3]
+verdicts  = ["#weak", "#good", "#mean"]
+
+save_to_file(
+    passwords,
+    scores,
+    verdicts,
+    file_name="resultados",
+    file_type="csv"    # gera resultados.csv
+)
 ```
 
----
-
-### 4. Checking Password Strength
+### 4. Verificar Força de Senha
 
 ```python
 from kpass import verify
 
-# Returns a numeric score (0–6)
-score = verify(password="J4ckw$$l190s", want_verdict=False)
-print(score)        # → 6
+# retorna "#very_strong"
+print(verify("J4ckw$$l190s"))
 
-# Returns a hashtag verdict
-label = verify(password="J4ckw$$l190s", want_verdict=True)
-print(label)        # → "#very_strong"
+# retorna 6
+print(verify("J4ckw$$l190s", want_verdict=False))
 ```
-
-| Score | Verdict       | Description |
-| :---: | :------------ | :---------- |
-|   0   | #very\_weak   | Very weak   |
-|  1–2  | #weak         | Weak        |
-|   3   | #mean         | Average     |
-|   4   | #good         | Good        |
-|   5   | #strong       | Strong      |
-|   6   | #very\_strong | Very strong |
 
 ---
 
 ## 🔧 API Reference
 
-```python
-generator(
-    name: str,
-    age: str,
-    birth_date: str
-) -> None
-```
-
-* **Generates** and **saves** password combinations automatically to `pass_generated.txt`.
-
-```python
-aplly_ciphers(
-    text: str
-) -> str
-```
-
-* **Transforms** the input text using leet-style substitutions defined in the internal dictionary.
-
-```python
-save_to_txt(
-    passwords: list[str],
-    file_name: str = "pass_generated.txt"
-) -> None
-```
-
-* **Saves** the list of passwords to a text file, displaying a progress bar in the terminal.
-
-```python
-verify(
-    password: str,
-    want_verdict: bool = True
-) -> int | str
-```
-
-* **Evaluates** the strength of a password: returns a numeric score (0–6) or, if `want_verdict=True`, the corresponding hashtag verdict.
+| Função                                                            | Descrição                                                            |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `generator(name, age, birth_date, file_type, file_name)`          | Gera combinações, avalia e salva em arquivo (`.json`/`.csv`/`.yaml`) |
+| `apply_ciphers(text)`                                             | Substitui caracteres por leet-speak                                  |
+| `save_to_file(passwords, scores, verdicts, file_name, file_type)` | Exporta listas de senhas+pontuação+veredito com barra de progresso   |
+| `verify(password, want_verdict=True)`                             | Avalia força; retorna `int` ou `str` (#weak, #good, etc.)            |
+| `check_sequences(password)`                                       | Detecta sequências numéricas ascendentes/descendentes                |
+| `veredict(score)`                                                 | Converte `int` de força em string de veredito (`#weak`, `#good`…)    |
 
 ---
 
-## ✅ Requirements
+## ✅ Requisitos
 
-* Python 3.6 or higher
-* `rich`
+* Python 3.6 ou superior
+* [rich](https://pypi.org/project/rich/) para barras de progresso
 
 ---
 
-## 📄 License
+## 📄 Licença
 
-This project is licensed under the MIT License.
+MIT License — use, modifique e compartilhe livremente.

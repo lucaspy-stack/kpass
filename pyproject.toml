@@ -1,55 +1,59 @@
-[build-system]
-requires = ["setuptools>=67", "wheel"]
-build-backend = "setuptools.build_meta"
+\[build-system]
+requires = \["setuptools>=67", "wheel"]
+build-backend = "setuptools.build\_meta"
 
-[project]
+\[project]
 name = "kpass-gen"
-version = "0.2.1"
-description = "kpass is a simple and customizable password generator using full name, age, and birthdate, with leet-style substitutions."
+version = "0.3.0"
+description = "kpass is a Python toolkit for generating, ciphering and evaluating passwords with JSON, CSV and YAML export."
 readme = "README.md"
 requires-python = ">=3.6"
 
-authors = [
-  { name = "Lucas Paulino Da Silva (~K')", email = "lucas.workps@gmail.com" }
+authors = \[
+{ name = "Lucas Paulino Da Silva (\~K')", email = "[lucas.workps@gmail.com](mailto:lucas.workps@gmail.com)" }
 ]
 
 license = { file = "LICENSE.txt" }
 
-dependencies = [
-  "rich"
+dependencies = \[
+"rich"
 ]
 
-keywords = [
-  "password",
-  "generator",
-  "leet",
-  "name-based",
-  "cybersecurity",
-  "bruteforce",
-  "security",
-  "rich",
-  "python"
+keywords = \[
+"password",
+"generator",
+"leet",
+"name-based",
+"cybersecurity",
+"pentest",
+"automation",
+"security",
+"rich",
+"csv",
+"yaml",
+"json",
+"python"
 ]
 
-classifiers = [
-  "Development Status :: 4 - Beta",
-  "Intended Audience :: Developers",
-  "Topic :: Security :: Cryptography",
-  "Topic :: Software Development :: Libraries :: Python Modules",
-  "License :: OSI Approved :: MIT License",
-  "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.6",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12"
+classifiers = \[
+"Development Status :: 4 - Beta",
+"Intended Audience :: Developers",
+"Topic :: Security :: Cryptography",
+"Topic :: Software Development :: Libraries :: Python Modules",
+"License :: OSI Approved :: MIT License",
+"Operating System :: OS Independent",
+"Programming Language :: Python :: 3",
+"Programming Language :: Python :: 3.6",
+"Programming Language :: Python :: 3.7",
+"Programming Language :: Python :: 3.8",
+"Programming Language :: Python :: 3.9",
+"Programming Language :: Python :: 3.10",
+"Programming Language :: Python :: 3.11",
+"Programming Language :: Python :: 3.12"
 ]
 
-[project.urls]
-Homepage = "https://github.com/lucaspy-stack/kpass"
-Repository = "https://github.com/lucaspy-stack/kpass"
-Issue Tracker = "https://github.com/lucaspy-stack/kpass/issues"
-Documentation = "https://github.com/lucaspy-stack/kpass#readme"
+\[project.urls]
+Homepage = "[https://github.com/lucaspy-stack/kpass](https://github.com/lucaspy-stack/kpass)"
+Repository = "[https://github.com/lucaspy-stack/kpass](https://github.com/lucaspy-stack/kpass)"
+Issue Tracker = "[https://github.com/lucaspy-stack/kpass/issues](https://github.com/lucaspy-stack/kpass/issues)"
+Documentation = "[https://github.com/lucaspy-stack/kpass#readme](https://github.com/lucaspy-stack/kpass#readme)"

@@ -2,6 +2,10 @@ import itertools
 from rich.progress import Progress, BarColumn, TextColumn, TimeElapsedColumn
 import re
 import string
+import json
+from math import perm
+from datetime import datetime
+from pathlib import Path
 
 # -----------------------------------------------------------------------------
 # Ciphers dictionary to replace letters with leetspeak equivalents
@@ -38,7 +42,7 @@ ciphers = {
 }
 
 # -----------------------------------------------------------------------------
-# Function: aplly_ciphers
+# Function: apply_ciphers
 # Description:
 #   Transforms input text by replacing each character according to the ciphers dict
 # Parameters:
@@ -47,151 +51,139 @@ ciphers = {
 #   str: The transformed text with cipher substitutions
 # -----------------------------------------------------------------------------
 
-def aplly_ciphers(text: str) -> str:
+def apply_ciphers(text: str) -> str:
     return ''.join(ciphers.get(char, char) for char in text)
+
+# -----------------------------------------------------------------------------
+# Utility: write with progress bar
+# -----------------------------------------------------------------------------
+
+def _write_with_progress(write_fn, items):
+    with Progress(
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TimeElapsedColumn(),
+    ) as progress:
+        task = progress.add_task("[cyan]Saving passwords...", total=len(items))
+        for item in items:
+            write_fn(item)
+            progress.update(task, advance=1)
 
 # -----------------------------------------------------------------------------
 # Function: save_to_file
 # Description:
-#   Writes a list of passwords to a text file, showing progress in the console
+#   Writes a list of passwords, scores, and verdicts to a file with progress
 # Parameters:
-#   passwords (list[str]): List of password strings to save
-#   file_name (str): Output filename (default: 'pass_generated.txt')
+#   passwords (list[str]): List of password strings
+#   scores (list[int]): Corresponding strength scores
+#   verdicts (list[str]): Corresponding verdict strings
+#   file_name (str): Output filename without extension
+#   file_type (str): Extension (json, csv, yaml, yml)
 # Returns:
 #   None
 # -----------------------------------------------------------------------------
 
 def save_to_file(
-        passwords: list[str],
-        scores: list[int],
-        veredicts: list[str],
-        file_name: str | None = "pass_generated",
-        extension: str | None = "json"        
+    passwords: list[str],
+    scores: list[int],
+    verdicts: list[str],
+    file_name: str = "pass_generated",
+    file_type: str = "json"
 ) -> None:
-    with open(f"{file_name}.{extension}", "w", encoding="utf-8-sig") as file:
-        lista = []
-        minu = extension.lower()
-        maxin = extension.upper()
-        
-        match (extension.lower()):
-            case "json" | ".json":
-                with Progress(
-                TextColumn("[progress.description]{task.description}"),
-                BarColumn(),
-                TimeElapsedColumn(),
-                ) as progress:
-                    tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
-                    for pwd, score, veredict_ in zip(passwords, scores, veredicts):
-                        file.write(base_files_architeture(pwd, score, veredict_, extension))
-                        progress.update(tarefa, advance=1)
-            
-            case "csv" | ".csv":
-                with Progress(
-                TextColumn("[progress.description]{task.description}"),
-                BarColumn(),
-                TimeElapsedColumn(),
-                ) as progress:
-                    tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
-                    for pwd, score, veredict_ in zip(passwords, scores, veredicts):
-                        file.write(base_files_architeture(pwd, score, veredict_, extension))
-                        progress.update(tarefa, advance=1)
+    extension = file_type.lstrip('.')
+    path = Path(f"{file_name}.{extension}")
+    path.write_text("", encoding="utf-8-sig")  # limpa conteúdo existente
 
-            case "yaml" | ".yaml" | "yml" | ".yml":
-                with Progress(
-                TextColumn("[progress.description]{task.description}"),
-                BarColumn(),
-                TimeElapsedColumn(),
-                ) as progress:
-                    tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
-                    for pwd, score, veredict_ in zip(passwords, scores, veredicts):
-                        file.write(base_files_architeture(pwd, score, veredict_, extension.upper()))
-                        progress.update(tarefa, advance=1)
+    def writer_json(item):
+        pwd, score, verdict = item
+        return json.dumps({"password": pwd, "score": score, "veredict": verdict}, indent=4, ensure_ascii=False) + "\n"
 
-            case _:
-                return print("#file type is not supported")    
+    def writer_csv(item):
+        pwd, score, verdict = item
+        return (
+            f'"password","{pwd}",\n'
+            f'"score","{score}",\n'
+            f'"veredict","{verdict}"\n\\n'
+        )
 
-        # with Progress(
-        #     TextColumn("[progress.description]{task.description}"),
-        #     BarColumn(),
-        #     TimeElapsedColumn(),
-        # ) as progress:
-        #     tarefa = progress.add_task("[cyan]Saving passwords...", total=len(passwords))
-        #     for pwd in passwords:
-        #         file.write(pwd + "\n")
-        #         progress.update(tarefa, advance=1)
+    def writer_yaml(item):
+        pwd, score, verdict = item
+        return (
+            f'"password": "{pwd}"\n'
+            f'"score": "{score}"\n'
+            f'"veredict": "{verdict}"\n\\n'
+        )
+
+    if extension == "json":
+        writer = writer_json
+    elif extension == "csv":
+        writer = writer_csv
+    elif extension in ("yaml", "yml"):
+        writer = writer_yaml
+    else:
+        raise ValueError(f"Unsupported file type: {file_type}")
+
+    items = list(zip(passwords, scores, verdicts))
+    with Progress(
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TimeElapsedColumn(),
+    ) as progress:
+        task = progress.add_task("[cyan]Saving passwords...", total=len(items))
+        with path.open("a", encoding="utf-8-sig") as file:
+            for item in items:
+                file.write(writer(item))
+                progress.update(task, advance=1)
+
+# -----------------------------------------------------------------------------
+# Function: base_files_architecture (no changes needed)
+# -----------------------------------------------------------------------------
+def base_files_architecture(password, score, verdict, file_type):
+    if file_type.lower() in ("json", ".json"):
+        return json.dumps({"password": password, "score": str(score), "veredict": verdict}, indent=4, ensure_ascii=False) + "\n\n"
+    if file_type.lower() in ("csv", ".csv"):
+        return (
+            f'"password","{password}",\n'
+            f'"score","{score}\n"'
+            f'"veredict","{verdict}"\n'
+        ) + "\n"
+    if file_type.lower() in ("yaml", ".yaml", "yml", ".yml"):
+        return (
+            f'"password": "{password}"\n'
+            f'"score": "{score}"\n'
+            f'"veredict": "{verdict}"\n'
+        ) + "\n"
 
 # -----------------------------------------------------------------------------
 # Function: generator
 # Description:
 #   Builds possible password permutations based on user info and ciphers,
-#   filters by length, and saves them using save_to_txt()
-# Parameters:
-#   name (str): Full name input for generating bases
-#   age (str): Age string (e.g., '25')
-#   birth_date (str): Birth date in 'DD/MM/YYYY' format
-# Returns:
-#   None (calls save_to_txt internally)
+#   filters by length, evaluates strength, and saves them
 # -----------------------------------------------------------------------------
 
-def base_files_architeture(password, score, veredict_, file_type):
-    if file_type.lower() in ("json", ".json"):
-        return (
-            '{\n'
-            f'  "password": "{password}",\n'
-            f'  "score": "{score}",\n'
-            f'  "veredict": "{veredict_}"\n'
-            '}'
-        )
-    
-    if file_type.lower() in ("csv", ".csv"):
-        return (
-        f'"password","{password}",\n'
-        f'"score","{score}",\n'
-        f'"veredict,"{veredict_}"\n'
-        )
-
-    
-    if file_type.lower() in ("yaml", ".yaml", "yml", ".yml") or file_type.upper() in ("YAML", ".YAML", "YML", ".YML"):
-        return (
-        f'"password": "{password}"\n'
-        f'"score": "{score}"\n'
-        f'"veredict: "{veredict_}"\n'
-        )
-
-def generator(name: str, age: str, birth_date: str, fyle_type: str | None = "json", fyle_name: str | None = "pass_generated") -> None:
-    # Split birth_date into components
-    day, month, year = birth_date.split("/")
-
-    # Normalize variants of the name
+def generator(
+    name: str,
+    age: str,
+    birth_date: str,
+    file_type: str = "json",
+    file_name: str = "pass_generated"
+) -> None:
+    dt = datetime.strptime(birth_date, "%d/%m/%Y")
+    day, month, year = dt.strftime("%d"), dt.strftime("m"), dt.strftime("Y")
     name_tiny = name.lower().replace(" ", "")
-    name_capital = name.upper().replace(" ", "")
-
     parts = name.split()
     first = parts[0]
     middle = "".join(parts[1:-1]) if len(parts) > 2 else ""
     last = parts[-1] if len(parts) > 1 else ""
-
-    # Reverse age string for variation
     age_reversed = age[::-1]
-
-    # Base building blocks for passwords
-    base_combinations = [
-        name_tiny, name_capital, first, middle, last,
-        day, month, year,
-        age, age_reversed,
-        aplly_ciphers(name_tiny), aplly_ciphers(first), aplly_ciphers(last)
+    bases = [
+        name_tiny, name.upper().replace(" ", ""), first, middle, last,
+        day, month, year, age, age_reversed,
+        apply_ciphers(name_tiny), apply_ciphers(first), apply_ciphers(last)
     ]
-
-    # Remove duplicates and empty strings
-    base_combinations = list({item for item in base_combinations if item.strip()})
-
+    bases = list({b for b in bases if b.strip()})
     possible_passwords = set()
-    possible_scores = set()
-    possible_veredicts = set()
-
-    # Calculate total permutations for progress bar
-    total = sum(len(list(itertools.permutations(base_combinations, i))) for i in range(2, 5))
-
+    total = sum(perm(len(bases), r) for r in range(2, 5))
     with Progress(
         TextColumn("[cyan]Generating passwords..."),
         BarColumn(),
@@ -199,44 +191,17 @@ def generator(name: str, age: str, birth_date: str, fyle_type: str | None = "jso
     ) as progress:
         task = progress.add_task("passwords", total=total)
         for length in range(2, 5):
-            for combo in itertools.permutations(base_combinations, length):
+            for combo in itertools.permutations(bases, length):
                 pwd = "".join(combo)
                 if 6 <= len(pwd) <= 18:
                     possible_passwords.add(pwd)
                 progress.update(task, advance=1)
-
-        scores = [verify(password, False) for password in possible_passwords]
-        veredicts = [verify(password) for password in possible_passwords]
-        
-        task2 = progress.add_task("scores", total=len(veredicts) - 1)
-        for length in range(2, 5):
-            for combo in itertools.permutations(base_combinations, length):
-                veredicts_list = "".join(combo)
-                if 6 <= len(veredicts_list) <= 18:
-                    possible_veredicts.add(pwd)
-                progress.update(task2, advance=1)
-        
-        task3 = progress.add_task("scores", total=len(scores) - 1)
-        for length in range(2, 5):
-            for combo in itertools.permutations(base_combinations, length):
-                scores_list = "".join(combo)
-                if 6 <= len(scores_list) <= 18:
-                    possible_scores.add(pwd)
-                progress.update(task2, advance=1)
-
-        
-
-    # Save results to file
-    save_to_file(list(possible_passwords), list(possible_scores), list(possible_veredicts), fyle_name, fyle_type)
+    scored = [(pwd, verify(pwd, False), veredict(verify(pwd, False))) for pwd in possible_passwords]
+    passwords, scores, verdicts = zip(*scored)
+    save_to_file(list(passwords), list(scores), list(verdicts), file_name, file_type)
 
 # -----------------------------------------------------------------------------
-# Function: check_sequences
-# Description:
-#   Detects ascending or descending numeric sequences of length 3 in password
-# Parameters:
-#   password (str): The password string to check
-# Returns:
-#   bool: True if a sequence is found, False otherwise
+# Sequence, verdict, and verify unchanged (except typo fix)
 # -----------------------------------------------------------------------------
 
 def check_sequences(password: str) -> bool:
@@ -248,71 +213,30 @@ def check_sequences(password: str) -> bool:
             return True
     return False
 
-# -----------------------------------------------------------------------------
-# Function: veredict
-# Description:
-#   Maps numeric strength score to a hashtag-based verdict string
-# Parameters:
-#   score (int): Numeric strength score (0-6)\# Returns:
-#   str: Verdict hashtag
-# -----------------------------------------------------------------------------
-
 def veredict(score: int) -> str:
     levels = [
-        "#very_weak",   # 0
-        "#weak",        # 1
-        "#weak",        # 2
-        "#mean",        # 3
-        "#good",        # 4
-        "#strong",      # 5
-        "#very_strong"  # 6
+        "#very_weak", "#weak", "#weak", "#mean", "#good", "#strong", "#very_strong"
     ]
-    # Safeguard for out-of-range scores
     return levels[score] if 0 <= score < len(levels) else "#unknown"
-
-# -----------------------------------------------------------------------------
-# Function: verify
-# Description:
-#   Evaluates password strength by checking length, digits, punctuation,
-#   case variety, and absence of predictable sequences
-# Parameters:
-#   password (str): Password string to evaluate
-#   want_verdict (bool): If True, return textual verdict; else, return numeric score
-# Returns:
-#   int | str: Numerical strength score or verdict string for you to treat the values ​​as you wish, the values ​​(int) range from 0 - 6
-# -----------------------------------------------------------------------------
 
 def verify(
     password: str,
     want_verdict: bool = True,
 ) -> int | str:
     strength = 0
-
-    # Length check (>=8 chars)
     if len(password) >= 8:
         strength += 1
-
-        # Digit presence
         if re.search(r'\d', password):
             strength += 1
-
-            # Special character presence
             if any(c in string.punctuation for c in password):
                 strength += 1
-
-                # Uppercase letter presence
                 if any(c.isupper() for c in password):
                     strength += 1
-
-                # Lowercase letter presence
                 if any(c.islower() for c in password):
                     strength += 1
-
-                # Sequence check (deduct if predictable)
                 if not check_sequences(password):
                     strength += 1
-
-    # Return verdict or raw score
     return veredict(strength) if want_verdict else strength
 
-generator("Lucas", "17", "29/08/2007", ".yml")
+# Example usage:
+generator("Lucas", "17", "29/08/2007", "json")

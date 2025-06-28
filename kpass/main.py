@@ -237,6 +237,3 @@ def verify(
                 if not check_sequences(password):
                     strength += 1
     return veredict(strength) if want_verdict else strength
-
-# Example usage:
-generator("Lucas", "17", "29/08/2007", "json")

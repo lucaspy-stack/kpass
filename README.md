@@ -64,13 +64,13 @@ pip install kpass-gen
 ```python
 from kpass import generator
 
-# Generates passwords, evaluates strength, and saves to pass_generated.json
+# Example: Johnny Silverhand (born 08/07/2000, age 50 in 2077)
 generator(
-    name="Lucas Paulino",
-    age="17",
-    birth_date="29/08/2007",
-    file_type="json",        # optional: json, csv, yaml or yml
-    file_name="my_passwords" # optional: filename without extension
+    name="Johnny Silverhand",
+    age="50",
+    birth_date="08/07/2000",
+    file_type="json",         # optional: json, csv, yaml or yml
+    file_name="jsilverhand"   # optional: filename without extension
 )
 ```
 
@@ -79,6 +79,7 @@ generator(
 ```python
 from kpass import apply_ciphers
 
+# Example: Panam Palmer
 leet = apply_ciphers("Panam Palmer")
 print(leet)  # → "|D4|\\|4/\\/\\ |D41/\\/\\312"
 ```
@@ -88,16 +89,17 @@ print(leet)  # → "|D4|\\|4/\\/\\ |D41/\\/\\312"
 ```python
 from kpass import save_to_file
 
-passwords = ["2077!", "Johnny34@", "V24!23"]
-scores    = [2, 4, 3]
-verdicts  = ["#weak", "#good", "#mean"]
+# Example passwords inspired by Cyberpunk characters
+passwords = ["Chipp4020!", "AltAccount2077$", "RoughTrade37#"]
+scores    = [3, 5, 4]
+verdicts  = ["#mean", "#strong", "#good"]
 
 save_to_file(
     passwords,
     scores,
     verdicts,
-    file_name="results",
-    file_type="csv"    # outputs results.csv
+    file_name="cyberpunk_list",
+    file_type="csv"    # outputs cyberpunk_list.csv
 )
 ```
 
@@ -107,10 +109,10 @@ save_to_file(
 from kpass import verify
 
 # returns "#very_strong"
-print(verify("J4ckw$$l190s"))
+print(verify("R0gueDr1ft!99"))
 
 # returns 6
-print(verify("J4ckw$$l190s", want_verdict=False))
+print(verify("R0gueDr1ft!99", want_verdict=False))
 ```
 
 ---

@@ -40,7 +40,7 @@ kpass creates combinations based on **publicly guessable data** (like names and 
 
 ```bash
 pip install kpass-gen
-
+```
 
 ---
 
@@ -48,13 +48,14 @@ pip install kpass-gen
 
 1. Generating Passwords
 
+```python
 from kpass import generator
 
 generator(
     name="Johnny Silverhand",
     age="34",
     birth_date="16/11/1988"
-)
+)```
 
 > Creates pass_generated.txt with valid passwords (6–18 chars) and a terminal progress bar.
 
@@ -75,16 +76,18 @@ print(leet)  # → "|D4|\|4/\/\ |D41/\/\312"
 
 3. Saving Custom Passwords
 
+```python
 from kpass import save_to_txt
 
 passwords = ["2077!", "Johnny34@", "V24!23"]
 save_to_txt(passwords, file_name="my_passwords.txt")
-
+```
 
 ---
 
-4. Password Strength Check
+### 4. Password Strength Check
 
+```python
 from kpass import verify
 
 score = verify(password="J4ckw$$l190s", want_verdict=False)
@@ -92,6 +95,7 @@ print(score)  # → 6
 
 label = verify(password="J4ckw$$l190s", want_verdict=True)
 print(label)  # → "#very_strong"
+```
 
 Score	Verdict	Description
 
@@ -101,6 +105,9 @@ Score	Verdict	Description
 4	#good	Good
 5	#strong	Strong
 6	#very_strong	Very strong
+
+
+> ⚠️ While this method is useful for checking password complexity (length, variation, common patterns), it is not a replacement for secure password handling. Always store passwords using proper hashing algorithms (e.g., bcrypt) and enforce policies on the backend for real authentication systems.
 
 
 

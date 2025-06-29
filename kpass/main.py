@@ -38,7 +38,13 @@ ciphers = {
     "W": "\\/\\/", "w": "\\/\\/",
     "X": "%", "x": "%",
     "Y": "`/", "y": "`/",
-    "Z": "2", "z": "2"
+    "Z": "2", "z": "2",
+    "÷": "/", "×": "x", "+": "plus", "=": "equals",
+    "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5",
+    "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9", "⁰": "0",
+    " ": "_", "-": "_", "_": "_", ".": "_",
+    "Δ": "D", "δ": "d", "π": "p", "σ": "s", "τ": "t",
+    "α": "a", "β": "b", "γ": "g"
 }
 
 # -----------------------------------------------------------------------------
@@ -170,14 +176,22 @@ def generator(
 ) -> None:
     dt = datetime.strptime(birth_date, "%d/%m/%Y")
     day, month, year = dt.strftime("%d"), dt.strftime("m"), dt.strftime("Y")
-    name_tiny = name.lower().replace(" ", "")
-    parts = name.split()
+
+    names = ""
+    for i in name:
+        if i in ("¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹", "⁰", "Δ", "δ", "π", "σ", "τ", "α", "β", "γ", "-", "_", ".", "+", "=", "÷", "×"):
+            names += ciphers[i]  # Convert superscript digits to normal digits
+        else:
+          names += i    
+
+    name_tiny = names.lower().replace(" ", "")
+    parts = names.split()
     first = parts[0]
     middle = "".join(parts[1:-1]) if len(parts) > 2 else ""
     last = parts[-1] if len(parts) > 1 else ""
     age_reversed = age[::-1]
     bases = [
-        name_tiny, name.upper().replace(" ", ""), first, middle, last,
+        name_tiny, names.upper().replace(" ", ""), first, middle, last,
         day, month, year, age, age_reversed,
         apply_ciphers(name_tiny), apply_ciphers(first), apply_ciphers(last)
     ]
@@ -205,7 +219,14 @@ def generator(
 # -----------------------------------------------------------------------------
 
 def check_sequences(password: str) -> bool:
-    digits = [int(c) for c in password if c.isdigit()]
+    passwords = ""
+    for i in password:
+        if i in ("¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹", "⁰"):
+            passwords += ciphers[i]  # Convert superscript digits to normal digits
+        else:
+            passwords += i    
+
+    digits = [int(c) for c in passwords if c.isdigit()]
     for i in range(len(digits) - 2):
         if digits[i] + 1 == digits[i+1] == digits[i+2] - 1:
             return True
@@ -237,3 +258,6 @@ def verify(
                 if not check_sequences(password):
                     strength += 1
     return veredict(strength) if want_verdict else strength
+
+
+generator("Δ = b² - 4 * a * c", "0", "01/01/2000", "json", "pass_generated")

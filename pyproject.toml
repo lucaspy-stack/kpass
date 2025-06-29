@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kpass-gen"
-version = "0.2.5"
+version = "0.2.6"
 description = "kpass is a Python toolkit for generating, ciphering and evaluating passwords with JSON, CSV and YAML export."
 readme = "README.md"
 requires-python = ">=3.6"
